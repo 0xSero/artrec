@@ -1,0 +1,288 @@
+# artrec taste profile.
+# Edit freely: `artrec profile --edit` opens it. Feedback (`artrec like/dislike`) is stored separately
+# in the database as learned adjustments on top of these numbers, so this file stays yours.
+
+[era]
+# Years outside this range are penalised smoothly, not excluded.
+start = 1100
+end = 1930
+
+[weights]
+# How the final score is blended (they are normalised, so only ratios matter).
+meta = 0.40      # artist, era, subject keywords, object type
+visual = 0.45    # CLIP similarity to works you liked + style prompts
+quality = 0.10   # image resolution
+novelty = 0.05   # prefer artists you have not been shown lately
+
+[batch]
+size = 6
+max_per_artist = 1          # per batch
+artist_cooldown_batches = 2 # an artist shown in the last N batches is penalised
+min_long_side = 1600        # px; smaller images are skipped
+min_color_share = 0.34      # at least this share of each batch is colour work (not monochrome prints)
+min_aspect = 0              # width / height; e.g. 1.5 = only wide banner/wallpaper shapes (0 = any shape)
+
+# ---------------------------------------------------------------------------
+# Artists: weight 0..1. `aliases` are extra spellings matched against attributions.
+# ---------------------------------------------------------------------------
+[artists]
+"Gustave Doré"            = { w = 1.00, aliases = ["Gustave Dore", "Paul Gustave Doré"] }
+"William Blake"           = { w = 1.00 }
+"Albrecht Dürer"          = { w = 1.00, aliases = ["Albrecht Durer", "Albrecht Duerer"] }
+"Hieronymus Bosch"        = { w = 1.00, aliases = ["Jheronimus Bosch"] }
+"M. C. Escher"            = { w = 1.00, aliases = ["Maurits Cornelis Escher", "M.C. Escher"] }
+"Giovanni Battista Piranesi" = { w = 0.95, aliases = ["Giambattista Piranesi"] }
+"Pieter Bruegel the Elder" = { w = 0.95, aliases = ["Pieter Bruegel", "Pieter Brueghel the Elder"] }
+"Matthias Grünewald"      = { w = 0.90, aliases = ["Matthias Grunewald"] }
+"John Martin"             = { w = 0.90 }
+"Henry Fuseli"            = { w = 0.85, aliases = ["Johann Heinrich Füssli", "Johann Heinrich Fussli"] }
+"Wenzel Jamnitzer"        = { w = 0.90 }
+"Lorenz Stöer"            = { w = 0.90, aliases = ["Lorenz Stoer"] }
+"Hans Vredeman de Vries"  = { w = 0.85 }
+"Robert Fludd"            = { w = 0.85 }
+"Hans Baldung Grien"      = { w = 0.85, aliases = ["Hans Baldung"] }
+"Martin Schongauer"       = { w = 0.85 }
+"Lucas Cranach the Elder" = { w = 0.75 }
+"Albrecht Altdorfer"      = { w = 0.80 }
+"Hans Holbein the Younger" = { w = 0.65 }
+"Hendrick Goltzius"       = { w = 0.75 }
+"Jacques Callot"          = { w = 0.75 }
+"Jan Luyken"              = { w = 0.70, aliases = ["Jan Luiken"] }
+"Matthäus Merian the Elder" = { w = 0.75, aliases = ["Matthaeus Merian", "Matthäus Merian"] }
+"Francisco de Goya"       = { w = 0.75, aliases = ["Francisco Goya", "Francisco José de Goya y Lucientes"] }
+"Jan van Eyck"            = { w = 0.85 }
+"Hans Memling"            = { w = 0.85 }
+"Rogier van der Weyden"   = { w = 0.80 }
+"Hugo van der Goes"       = { w = 0.80 }
+"Dieric Bouts"            = { w = 0.75, aliases = ["Dirk Bouts"] }
+"Joachim Patinir"         = { w = 0.75, aliases = ["Joachim Patenier"] }
+"Stefan Lochner"          = { w = 0.75 }
+"Limbourg brothers"       = { w = 0.90, aliases = ["Limbourg Brothers", "Paul de Limbourg"] }
+"Giotto"                  = { w = 0.85, aliases = ["Giotto di Bondone"] }
+"Duccio"                  = { w = 0.80, aliases = ["Duccio di Buoninsegna"] }
+"Simone Martini"          = { w = 0.75 }
+"Fra Angelico"            = { w = 0.90 }
+"Fra Filippo Lippi"       = { w = 0.70 }
+"Sandro Botticelli"       = { w = 0.90 }
+"Andrea Mantegna"         = { w = 0.80 }
+"Piero della Francesca"   = { w = 0.75 }
+"Carlo Crivelli"          = { w = 0.75 }
+"Luca Signorelli"         = { w = 0.80 }
+"Michelangelo"            = { w = 0.80, aliases = ["Michelangelo Buonarroti"] }
+"Leonardo da Vinci"       = { w = 0.75 }
+"Raphael"                 = { w = 0.70, aliases = ["Raffaello Sanzio"] }
+"Hildegard of Bingen"     = { w = 0.85 }
+"Odilon Redon"            = { w = 0.85 }
+"Gustave Moreau"          = { w = 0.85 }
+"Arnold Böcklin"          = { w = 0.80, aliases = ["Arnold Bocklin"] }
+"Jean Delville"           = { w = 0.80 }
+"Carlos Schwabe"          = { w = 0.80 }
+"Alexandre Cabanel"       = { w = 0.75 }
+"John Everett Millais"    = { w = 0.70 }
+"Dante Gabriel Rossetti"  = { w = 0.70 }
+"Edward Burne-Jones"      = { w = 0.75, aliases = ["Sir Edward Coley Burne-Jones", "Edward Coley Burne-Jones"] }
+"John William Waterhouse" = { w = 0.70 }
+"Caspar David Friedrich"  = { w = 0.70 }
+"Thomas Cole"             = { w = 0.65 }
+"Samuel Palmer"           = { w = 0.75 }
+"Harry Clarke"            = { w = 0.85 }
+"Aubrey Beardsley"        = { w = 0.70 }
+
+# ---------------------------------------------------------------------------
+# Subject keywords, matched (whole words) in titles, subjects, descriptions, mediums.
+# Positive values attract, negative ones repel. Matches are summed and capped.
+# ---------------------------------------------------------------------------
+[keywords]
+apocalypse = 0.5
+revelation = 0.4
+"last judgment" = 0.5
+"last judgement" = 0.5
+inferno = 0.5
+purgatorio = 0.5
+paradiso = 0.5
+dante = 0.4
+milton = 0.4
+"paradise lost" = 0.5
+satan = 0.4
+lucifer = 0.4
+angel = 0.3
+angels = 0.3
+archangel = 0.4
+demon = 0.4
+devil = 0.3
+dragon = 0.3
+hell = 0.4
+heaven = 0.3
+vision = 0.35
+visionary = 0.4
+temptation = 0.35
+"saint anthony" = 0.4
+"triumph of death" = 0.5
+"dance of death" = 0.4
+death = 0.2
+allegory = 0.3
+melancholy = 0.35
+melencolia = 0.5
+alchemy = 0.4
+cosmos = 0.4
+cosmology = 0.4
+macrocosm = 0.5
+microcosm = 0.5
+geometry = 0.35
+perspective = 0.3
+polyhedra = 0.5
+labyrinth = 0.4
+prison = 0.3
+carceri = 0.5
+tower = 0.2
+babel = 0.4
+deluge = 0.4
+flood = 0.3
+creation = 0.3
+crucifixion = 0.2
+annunciation = 0.25
+madonna = 0.15
+saint = 0.1
+martyrdom = 0.15
+myth = 0.2
+ophelia = 0.4
+"book of hours" = 0.4
+illumination = 0.3
+illuminated = 0.3
+manuscript = 0.25
+woodcut = 0.15
+engraving = 0.15
+etching = 0.1
+# repellents: mundane objects and genres
+"still life" = -0.4
+fruit = -0.3
+coin = -0.8
+medal = -0.6
+ceramic = -0.8
+porcelain = -0.8
+furniture = -0.8
+textile = -0.6
+photograph = -1.0
+"title page" = -0.6
+"bookplate" = -0.7
+"trade card" = -0.8
+"design for" = -0.3
+ornament = -0.3
+"portrait of a" = -0.25
+
+# Object classifications (substring, lowercased) of the museum record.
+[classifications]
+painting = 0.6
+print = 0.5
+drawing = 0.4
+manuscript = 0.7
+illumination = 0.7
+miniature = 0.5
+book = 0.3
+"stained glass" = 0.5
+tapestry = 0.3
+photograph = -1.0
+ceramic = -1.0
+furniture = -1.0
+coin = -1.0
+medal = -1.0
+textile = -0.6
+sculpture = -0.2
+"decorative arts" = -0.8
+metalwork = -0.6
+
+# ---------------------------------------------------------------------------
+# Visual taste anchors. Text prompts are embedded with CLIP and compared to every image.
+# ---------------------------------------------------------------------------
+[prompts]
+positive = [
+  "a dramatic visionary engraving of angels and demons",
+  "a Gustave Doré wood engraving of a sublime biblical scene",
+  "a William Blake watercolour of a mystical figure",
+  "a medieval illuminated manuscript page with gold leaf",
+  "an early Netherlandish altarpiece painting full of tiny detail",
+  "a Hieronymus Bosch fantastical hellscape with strange creatures",
+  "an Escher-like impossible architecture and geometric polyhedra",
+  "a Renaissance woodcut of the apocalypse",
+  "a romantic sublime apocalyptic landscape with tiny figures",
+  "a symbolist painting of a dreamlike ethereal woman",
+]
+negative = [
+  "a photograph",
+  "a plain head and shoulders portrait of a man",
+  "a still life with fruit",
+  "a ceramic vase or decorative object",
+  "a page of printed text",
+  "a map",
+  "a plain sketch of a hand",
+  "a coin or medal",
+  "a modern abstract painting",
+]
+
+# Works resolved from the candidate pool by artist + title substring and used as liked seeds.
+[[anchors]]
+artist = "Albrecht Dürer"
+title = "Melencolia"
+[[anchors]]
+artist = "Albrecht Dürer"
+title = "Knight, Death"
+[[anchors]]
+artist = "Albrecht Dürer"
+title = "Four Horsemen"
+[[anchors]]
+artist = "William Blake"
+title = "Circle of the"
+[[anchors]]
+artist = "William Blake"
+title = "Ancient of Days"
+[[anchors]]
+artist = "Giovanni Battista Piranesi"
+title = "Carceri"
+[[anchors]]
+artist = "Gustave Doré"
+title = "Inferno"
+[[anchors]]
+artist = "Pieter Bruegel the Elder"
+title = "Last Judgment"
+[[anchors]]
+artist = "Martin Schongauer"
+title = "Saint Anthony"
+
+# ---------------------------------------------------------------------------
+# Sources. Wikimedia endpoints are throttled hard and skipped if they rate-limit.
+# ---------------------------------------------------------------------------
+[visual]
+# Share of the visual score from likeness to liked works, seeds and anchors; the rest comes from the prompts.
+like_share = 0.6
+# Optional hard subject gate (zero-shot CLIP): keep only images more likely to show `subject`
+# than any of `subject_against`. Leave `subject` unset to switch it off. Example:
+# subject = "a painting of a single woman"
+# subject_against = ["a painting of a single man", "a painting of a group of people",
+#                    "a landscape painting", "a still life"]
+# subject_min = 0.45
+
+[sources]
+aic = true
+cleveland = true
+nga = true
+commons = true
+wikidata = true
+
+# Curated Wikimedia Commons categories (series that museums rarely publish).
+commons_categories = [
+  "Category:Gustave Doré - Inferno",
+  "Category:Gustave Doré - Purgatorio",
+  "Category:Gustave Doré - Paradiso",
+  "Category:Illustrations of Paradise Lost by Gustave Doré",
+  "Category:The Rime of the Ancient Mariner by Gustave Doré",
+  "Category:William Blake's illustrations to the Divine Comedy",
+  "Category:William Blake's illustrations of the Book of Revelation",
+  "Category:Albrecht Dürer woodcut series - Apocalypse",
+  "Category:Le Carceri d'Invenzione (second edition, 1761)",
+  "Category:Perspectiva Corporum Regularium",
+  "Category:Geometria et perspectiva - Lorenz Stöer",
+  "Category:Utriusque Cosmi",
+  "Category:Scivias",
+  "Category:Très Riches Heures du Duc de Berry",
+  "Category:Works of Edgar Allan Poe by Harry Clarke",
+]
